@@ -20,6 +20,8 @@ build/
 *.iml
 *.ipr
 out/
+src/main/java/dao
+src/test/java/dao
 
 ### NetBeans ###
 /nbproject/private/
