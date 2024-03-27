@@ -42,6 +42,10 @@ public abstract class Piece {
         return this.color != other.color;
     }
 
+    public boolean isColor(final Color color) {
+        return this.color.equals(color);
+    }
+
     public boolean isBlack() {
         return this.color.equals(Color.BLACK);
     }

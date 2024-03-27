@@ -1,11 +1,13 @@
 package chess.domain;
 
+import chess.domain.piece.Color;
 import chess.domain.piece.Piece;
 import chess.domain.position.Movement;
 import chess.domain.position.Position;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ChessBoard {
 
@@ -87,5 +89,11 @@ public class ChessBoard {
 
     public Map<Position, Piece> getPieces() {
         return Collections.unmodifiableMap(pieces);
+    }
+
+    public Map<Position, Piece> getPiecesWithPositionBy(final Color color) {
+        return pieces.entrySet().stream()
+                .filter(piece -> piece.getValue().isColor(color))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }
