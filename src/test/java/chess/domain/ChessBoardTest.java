@@ -169,7 +169,7 @@ class ChessBoardTest {
     @Test
     void getBlackPiecesWithPositionBy() {
         // given
-        final ChessBoard chessBoard = ChessBoardFixture.createChessBordForScore();
+        final ChessBoard chessBoard = ChessBoardFixture.chessBoardForScore1;
 
         // when
         final Map<Position, Piece> piecesWithPosition = chessBoard.getPiecesWithPositionBy(Color.BLACK);
@@ -187,7 +187,7 @@ class ChessBoardTest {
     @Test
     void getWhitePiecesWithPositionBy() {
         // given
-        final ChessBoard chessBoard = ChessBoardFixture.createChessBordForScore();
+        final ChessBoard chessBoard = ChessBoardFixture.chessBoardForScore1;
 
         // when
         final Map<Position, Piece> piecesWithPosition = chessBoard.getPiecesWithPositionBy(Color.WHITE);
