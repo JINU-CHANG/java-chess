@@ -41,6 +41,12 @@ public class ChessBoard {
         throw new IllegalArgumentException("[ERROR] 해당 위치에 기물이 존재하지 않습니다.");
     }
 
+    public Map<Position, Piece> getPiecesWithPositionBy(final Color color) {
+        return pieces.entrySet().stream()
+                .filter(piece -> piece.getValue().isColor(color))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
     private Set<Position> getRoute(final Piece currentPiece, final Position current, final Position destination) {
         final Movement movement = new Movement(current, destination);
 
@@ -89,11 +95,5 @@ public class ChessBoard {
 
     public Map<Position, Piece> getPieces() {
         return Collections.unmodifiableMap(pieces);
-    }
-
-    public Map<Position, Piece> getPiecesWithPositionBy(final Color color) {
-        return pieces.entrySet().stream()
-                .filter(piece -> piece.getValue().isColor(color))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

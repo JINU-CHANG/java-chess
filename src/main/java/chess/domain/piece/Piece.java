@@ -50,7 +50,11 @@ public abstract class Piece {
         return this.color.equals(Color.BLACK);
     }
 
+    public abstract boolean isPawn();
+
     public abstract boolean canMove(final Movement movement);
+
+    public abstract double getScore();
 
     @Override
     public boolean equals(Object o) {

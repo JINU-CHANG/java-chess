@@ -9,6 +9,7 @@ import java.util.Set;
 public class King extends Piece {
 
     private static final int DEFAULT_STEP = 1;
+    private static final double KING_SCORE = 0;
 
     public King(final Color color) {
         super(color);
@@ -22,7 +23,17 @@ public class King extends Piece {
     }
 
     @Override
+    public double getScore() {
+        return KING_SCORE;
+    }
+
+    @Override
     public Set<Position> getRoute(final Movement movement) {
         return Set.of();
+    }
+
+    @Override
+    public boolean isPawn() {
+        return false;
     }
 }

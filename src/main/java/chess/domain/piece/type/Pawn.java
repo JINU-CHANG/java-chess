@@ -11,6 +11,7 @@ public class Pawn extends Piece {
 
     public static final int DEFAULT_STEP = 1;
     private static final int INIT_AVAILABLE_STEP = 2;
+    private static final double PAWN_DEFAULT_SCORE = 1;
     private static final Rank INIT_WHITE_RANK = Rank.TWO;
     private static final Rank INIT_BLACK_RANK = Rank.SEVEN;
 
@@ -28,11 +29,21 @@ public class Pawn extends Piece {
     }
 
     @Override
+    public double getScore() {
+        return PAWN_DEFAULT_SCORE;
+    }
+
+    @Override
     public Set<Position> getCatchRoute(final Movement movement) {
         if (!(movement.isDiagonal() && movement.getRankDistance() == Pawn.DEFAULT_STEP)) {
             throw new IllegalArgumentException("[ERROR] 폰은 대각선으로만 기물을 잡을 수 있습니다.");
         }
         return getRoute(movement);
+    }
+
+    @Override
+    public boolean isPawn() {
+        return true;
     }
 
     private boolean canBlackMove(final Movement movement) {

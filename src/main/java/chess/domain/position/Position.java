@@ -1,6 +1,7 @@
 package chess.domain.position;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class Position {
 
@@ -48,6 +49,10 @@ public class Position {
         return this.rank.equals(rank);
     }
 
+    public boolean isFile(final File file) {
+        return this.file.equals(file);
+    }
+
     public int getFileIndex() {
         return this.file.getIndex();
     }
@@ -71,5 +76,9 @@ public class Position {
     @Override
     public int hashCode() {
         return Objects.hash(rank, file);
+    }
+
+    public boolean hasSameRank(final Set<Position> positions) {
+        return positions.stream().anyMatch(this::isSameRank);
     }
 }

@@ -6,8 +6,15 @@ import chess.domain.piece.Piece;
 
 public class Queen extends Piece {
 
+    private static final double QUEEN_SCORE = 9;
+
     public Queen(final Color color) {
         super(color);
+    }
+
+    @Override
+    public boolean isPawn() {
+        return false;
     }
 
     @Override
@@ -15,5 +22,10 @@ public class Queen extends Piece {
         return movement.isDiagonal()
                 || movement.isVertical()
                 || movement.isHorizontal();
+    }
+
+    @Override
+    public double getScore() {
+        return QUEEN_SCORE;
     }
 }

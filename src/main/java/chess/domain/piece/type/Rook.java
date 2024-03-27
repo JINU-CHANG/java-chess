@@ -6,6 +6,8 @@ import chess.domain.piece.Piece;
 
 public class Rook extends Piece {
 
+    private static final double ROOK_SCORE = 5;
+
     public Rook(final Color color) {
         super(color);
     }
@@ -13,5 +15,15 @@ public class Rook extends Piece {
     @Override
     public boolean canMove(final Movement movement) {
         return movement.isVertical() || movement.isHorizontal();
+    }
+
+    @Override
+    public double getScore() {
+        return ROOK_SCORE;
+    }
+
+    @Override
+    public boolean isPawn() {
+        return false;
     }
 }
