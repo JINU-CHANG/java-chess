@@ -49,7 +49,7 @@ public class ChessBoardFixture {
         pieces.put(new Position(File.E, Rank.ONE), new Rook(Color.WHITE));
         pieces.put(new Position(File.H, Rank.ONE), new King(Color.WHITE));
 
-        return new ChessBoard(pieces);
+        return new ChessBoard(new Turn(Color.WHITE), pieces);
     }
 
     /**
@@ -83,6 +83,6 @@ public class ChessBoardFixture {
         pieces.put(new Position(File.E, Rank.ONE), new Rook(Color.WHITE));
         pieces.put(new Position(File.H, Rank.ONE), new King(Color.WHITE));
 
-        return new ChessBoard(pieces);
+        return new ChessBoard(new Turn(Color.WHITE), pieces);
     }
 }

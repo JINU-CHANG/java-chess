@@ -1,6 +1,7 @@
 package chess.util;
 
 import chess.domain.ChessBoard;
+import chess.domain.Turn;
 import chess.domain.piece.Color;
 import chess.domain.position.File;
 import chess.domain.piece.Piece;
@@ -28,7 +29,7 @@ public class ChessBoardInitializer {
         createPawn(pieces, Color.WHITE, Rank.TWO);
         createPieceWithoutPawn(pieces, Color.WHITE, Rank.ONE);
 
-        return new ChessBoard(pieces);
+        return new ChessBoard(new Turn(Color.WHITE), pieces);
     }
 
     private static void createPawn(final Map<Position, Piece> pieces, final Color color, final Rank rank) {

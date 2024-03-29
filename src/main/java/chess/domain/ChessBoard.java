@@ -12,12 +12,14 @@ import java.util.stream.Collectors;
 public class ChessBoard {
 
     private final Map<Position, Piece> pieces;
+    private final Turn turn;
 
-    public ChessBoard(final Map<Position, Piece> pieces) {
+    public ChessBoard(final Turn turn, final Map<Position, Piece> pieces) {
+        this.turn = turn;
         this.pieces = pieces;
     }
 
-    public void move(final Turn turn, final Position current, final Position destination) {
+    public void move(final Position current, final Position destination) {
         final Piece currentPiece = findPieceBy(current);
 
         validateTurn(turn, currentPiece);
@@ -25,11 +27,12 @@ public class ChessBoard {
         validatePieceInRoute(getRoute(currentPiece, current, destination));
 
         movePiece(currentPiece, current, destination);
+        turn.change();
     }
 
     private void validateTurn(final Turn turn, final Piece currentPiece) {
         if (!turn.myTurn(currentPiece)) {
-            throw new IllegalArgumentException(String.format("[ERROR] 현재는 %s 의 차례입니다.", turn.getTurn()));
+            throw new IllegalArgumentException(String.format("[ERROR] 현재는 %s의 차례입니다.", turn.getTurn()));
         }
     }
 
