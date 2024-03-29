@@ -1,6 +1,6 @@
 package chess.view;
 
-import chess.dto.ChessBoardDto;
+import chess.dto.ChessBoardResponse;
 import java.util.List;
 
 public class OutputView {
@@ -13,7 +13,7 @@ public class OutputView {
                 > 게임 이동 : move source위치 target위치 - 예. move b2 b3""");
     }
 
-    public void printChessBoard(final ChessBoardDto chessBoardDto) {
+    public void printChessBoard(final ChessBoardResponse chessBoardDto) {
         chessBoardDto.chessBoard().forEach(this::printChessRow);
     }
 

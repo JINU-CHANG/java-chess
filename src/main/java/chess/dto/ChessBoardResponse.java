@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public record ChessBoardDto(List<List<Character>> chessBoard) {
+public record ChessBoardResponse(List<List<Character>> chessBoard) {
 
-    public static ChessBoardDto from(final Map<Position, Piece> pieces) {
+    public static ChessBoardResponse from(final Map<Position, Piece> pieces) {
         final List<List<Character>> board = new ArrayList<>();
         for (int i = 0; i < Rank.values().length; i++) {
             board.add(new ArrayList<>(List.of('.', '.', '.', '.', '.', '.', '.', '.')));
@@ -25,6 +25,6 @@ public record ChessBoardDto(List<List<Character>> chessBoard) {
             marks.set(fileIndex, ChessBoardMarker.getSymbol(entry.getValue()));
         }
 
-        return new ChessBoardDto(board);
+        return new ChessBoardResponse(board);
     }
 }

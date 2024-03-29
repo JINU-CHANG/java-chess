@@ -10,6 +10,6 @@ public class Application {
         final InputView inputView = new InputView();
         final OutputView outputView = new OutputView();
         final ChessController chessController = new ChessController(inputView, outputView);
-        chessController.runChess();
+        chessController.run();
     }
 }

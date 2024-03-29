@@ -1,11 +1,12 @@
 package chess.controller;
 
-import static chess.domain.piece.Color.WHITE;
+import static chess.exception.RetryHandler.retryOnException;
 
-import chess.domain.ChessBoard;
-import chess.domain.Turn;
-import chess.util.ChessBoardInitializer;
 import chess.domain.Command;
+import chess.dto.ChessBoardResponse;
+import chess.dto.CommandRequest;
+import chess.domain.ChessBoard;
+import chess.util.ChessBoardInitializer;
 import chess.domain.position.Position;
 import chess.view.InputView;
 import chess.view.OutputView;
@@ -21,36 +22,50 @@ public class ChessController {
         this.outputView = outputView;
     }
 
-    public void runChess() {
-        final Turn turn = new Turn(WHITE);
-        final Command initCommand = Command.from(inputView.readInitCommand());
+    public void run() {
+        printCommandMenu();
+        retryOnException(this::startGame);
+    }
 
-        if (!initCommand.isStart()) {
-            return;
-        }
+    private void startGame() {
+        final Command command = Command.fromStart(inputView.readCommand());
 
-        final ChessBoard chessBoard = ChessBoardInitializer.init();
-        outputView.printChessBoard(chessBoard.getPieces());
+        if (command.isStart()) {
+            final ChessBoard chessBoard = ChessBoardInitializer.init();
 
-        List<String> command = inputView.readMoveCommand();
-
-        while (isNotEndCommand(command)) {
-            playTurn(command, turn, chessBoard);
-
-            command = inputView.readMoveCommand();
+            printChessBoard(chessBoard);
+            retryOnException(() -> playTurn(chessBoard));
         }
     }
 
-    private boolean isNotEndCommand(final List<String> command) {
-        return !command.isEmpty();
+    private void printChessBoard(final ChessBoard chessBoard) {
+        final ChessBoardResponse chessBoardResponse = ChessBoardResponse.from(chessBoard.getPieces());
+        outputView.printChessBoard(chessBoardResponse);
     }
 
-    private void playTurn(final List<String> command, final Turn turn, final ChessBoard chessBoard) {
+    private void playTurn(final ChessBoard chessBoard) {
+        while (true) {
+            final CommandRequest commandRequest = CommandRequest.fromPlay(inputView.readCommand());
+
+            if (commandRequest.isEnd()) {
+                break;
+            }
+
+            if (commandRequest.isMove()) {
+                move(chessBoard, commandRequest.getBody());
+                printChessBoard(chessBoard);
+            }
+        }
+    }
+
+    private void printCommandMenu() {
+        outputView.printCommandMenu();
+    }
+
+    private void move(final ChessBoard chessBoard, final List<String> command) {
         final Position current = new Position(command.get(0));
         final Position destination = new Position(command.get(1));
 
-        chessBoard.move(turn, current, destination);
-        turn.change();
-        outputView.printChessBoard(chessBoard.getPieces());
+        chessBoard.move(current, destination);
     }
 }
