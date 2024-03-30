@@ -1,13 +1,16 @@
 package chess.domain;
 
+import chess.domain.board.ChessBoard;
+import chess.domain.board.Turn;
 import chess.domain.piece.Color;
 import chess.domain.piece.Piece;
 import chess.domain.piece.type.Bishop;
+import chess.domain.piece.type.BlackPawn;
 import chess.domain.piece.type.King;
 import chess.domain.piece.type.Knight;
-import chess.domain.piece.type.Pawn;
 import chess.domain.piece.type.Queen;
 import chess.domain.piece.type.Rook;
+import chess.domain.piece.type.WhitePawn;
 import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
@@ -35,17 +38,17 @@ public class ChessBoardFixture {
 
         pieces.put(new Position(File.B, Rank.EIGHT), new King(Color.BLACK));
         pieces.put(new Position(File.C, Rank.EIGHT), new Rook(Color.BLACK));
-        pieces.put(new Position(File.A, Rank.SEVEN), new Pawn(Color.BLACK));
-        pieces.put(new Position(File.C, Rank.SEVEN), new Pawn(Color.BLACK));
+        pieces.put(new Position(File.A, Rank.SEVEN), new BlackPawn());
+        pieces.put(new Position(File.C, Rank.SEVEN), new BlackPawn());
         pieces.put(new Position(File.D, Rank.SEVEN), new Bishop(Color.BLACK));
-        pieces.put(new Position(File.B, Rank.SIX), new Pawn(Color.BLACK));
+        pieces.put(new Position(File.B, Rank.SIX), new BlackPawn());
         pieces.put(new Position(File.E, Rank.SIX), new Queen(Color.BLACK));
         pieces.put(new Position(File.F, Rank.FOUR), new Knight(Color.WHITE));
         pieces.put(new Position(File.G, Rank.FOUR), new Queen(Color.WHITE));
-        pieces.put(new Position(File.F, Rank.THREE), new Pawn(Color.WHITE));
-        pieces.put(new Position(File.H, Rank.THREE), new Pawn(Color.WHITE));
-        pieces.put(new Position(File.F, Rank.TWO), new Pawn(Color.WHITE));
-        pieces.put(new Position(File.G, Rank.TWO), new Pawn(Color.WHITE));
+        pieces.put(new Position(File.F, Rank.THREE), new WhitePawn());
+        pieces.put(new Position(File.H, Rank.THREE), new WhitePawn());
+        pieces.put(new Position(File.F, Rank.TWO), new WhitePawn());
+        pieces.put(new Position(File.G, Rank.TWO), new WhitePawn());
         pieces.put(new Position(File.E, Rank.ONE), new Rook(Color.WHITE));
         pieces.put(new Position(File.H, Rank.ONE), new King(Color.WHITE));
 
@@ -68,18 +71,18 @@ public class ChessBoardFixture {
 
         pieces.put(new Position(File.B, Rank.EIGHT), new King(Color.BLACK));
         pieces.put(new Position(File.C, Rank.EIGHT), new Rook(Color.BLACK));
-        pieces.put(new Position(File.A, Rank.SEVEN), new Pawn(Color.BLACK));
-        pieces.put(new Position(File.C, Rank.SEVEN), new Pawn(Color.BLACK));
-        pieces.put(new Position(File.A, Rank.SIX), new Pawn(Color.BLACK));
-        pieces.put(new Position(File.B, Rank.SIX), new Pawn(Color.BLACK));
-        pieces.put(new Position(File.A, Rank.FIVE), new Pawn(Color.BLACK));
+        pieces.put(new Position(File.A, Rank.SEVEN), new BlackPawn());
+        pieces.put(new Position(File.C, Rank.SEVEN), new BlackPawn());
+        pieces.put(new Position(File.A, Rank.SIX), new BlackPawn());
+        pieces.put(new Position(File.B, Rank.SIX), new BlackPawn());
+        pieces.put(new Position(File.A, Rank.FIVE), new BlackPawn());
         pieces.put(new Position(File.D, Rank.SEVEN), new Bishop(Color.BLACK));
         pieces.put(new Position(File.E, Rank.SIX), new Queen(Color.BLACK));
         pieces.put(new Position(File.F, Rank.FOUR), new Knight(Color.WHITE));
         pieces.put(new Position(File.G, Rank.FOUR), new Queen(Color.WHITE));
-        pieces.put(new Position(File.H, Rank.THREE), new Pawn(Color.WHITE));
-        pieces.put(new Position(File.F, Rank.TWO), new Pawn(Color.WHITE));
-        pieces.put(new Position(File.G, Rank.TWO), new Pawn(Color.WHITE));
+        pieces.put(new Position(File.H, Rank.THREE), new WhitePawn());
+        pieces.put(new Position(File.F, Rank.TWO), new WhitePawn());
+        pieces.put(new Position(File.G, Rank.TWO), new WhitePawn());
         pieces.put(new Position(File.E, Rank.ONE), new Rook(Color.WHITE));
         pieces.put(new Position(File.H, Rank.ONE), new King(Color.WHITE));
 
