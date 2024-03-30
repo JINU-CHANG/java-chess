@@ -25,4 +25,7 @@ public abstract class Pawn extends Piece {
     public boolean isPawn() {
         return true;
     }
+
+    @Override
+    public boolean isKing() { return false; }
 }

@@ -28,7 +28,10 @@ public class ChessBoard {
         validatePieceInRoute(getRoute(currentPiece, current, destination));
 
         movePiece(currentPiece, current, destination);
-        turn.change();
+
+        if (!isKingCaught()) {
+            turn.change();
+        }
     }
 
     public Piece findPieceBy(final Position position) {
@@ -43,6 +46,10 @@ public class ChessBoard {
         return pieces.entrySet().stream()
                 .filter(piece -> piece.getValue().isColor(color))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    public boolean isKingCaught() {
+        return pieces.values().stream().filter(Piece::isKing).count() < 2;
     }
 
     private void validateTurn(final Turn turn, final Piece currentPiece) {
@@ -98,5 +105,9 @@ public class ChessBoard {
 
     public Map<Position, Piece> getPieces() {
         return Collections.unmodifiableMap(pieces);
+    }
+
+    public Color getTurn() {
+        return turn.getTurn();
     }
 }

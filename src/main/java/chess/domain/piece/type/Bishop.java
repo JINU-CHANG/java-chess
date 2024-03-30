@@ -23,6 +23,11 @@ public class Bishop extends Piece {
     }
 
     @Override
+    public boolean isKing() {
+        return false;
+    }
+
+    @Override
     public double getScore() {
         return BISHOP_SCORE;
     }

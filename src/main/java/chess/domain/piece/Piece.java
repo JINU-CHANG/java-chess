@@ -49,6 +49,8 @@ public abstract class Piece {
 
     public abstract boolean isPawn();
 
+    public abstract boolean isKing();
+
     public abstract boolean canMove(final Movement movement);
 
     public abstract double getScore();

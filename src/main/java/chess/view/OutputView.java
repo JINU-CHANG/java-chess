@@ -1,6 +1,7 @@
 package chess.view;
 
 import chess.domain.Scores;
+import chess.domain.piece.Color;
 import chess.dto.ChessBoardResponse;
 import java.util.List;
 
@@ -23,6 +24,10 @@ public class OutputView {
         final double whiteScore = scores.getWhiteScore();
 
         System.out.println(String.format("BLACK 점수 : %.2f, WHITE 점수 : %.2f", blackScore, whiteScore));
+    }
+
+    public void printWinner(final Color winner) {
+        System.out.println(String.format("축하합니다🎉 우승자는 %s입니다.", winner));
     }
 
     private void printChessRow(final List<Character> row) {

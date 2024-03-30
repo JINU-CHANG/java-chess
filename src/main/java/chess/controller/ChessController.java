@@ -59,6 +59,11 @@ public class ChessController {
             if (command.isStatus()) {
                 outputView.printScores(Scores.from(chessBoard));
             }
+
+            if (chessBoard.isKingCaught()) {
+                outputView.printWinner(chessBoard.getTurn());
+                break;
+            }
         }
     }
 

@@ -18,6 +18,11 @@ public class Queen extends Piece {
     }
 
     @Override
+    public boolean isKing() {
+        return false;
+    }
+
+    @Override
     public boolean canMove(final Movement movement) {
         return movement.isDiagonal()
                 || movement.isVertical()
