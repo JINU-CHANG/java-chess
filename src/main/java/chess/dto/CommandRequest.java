@@ -14,8 +14,8 @@ public class CommandRequest {
         this.body = body;
     }
 
-    public static CommandRequest fromStart(final String message) {
-        final Command command = Command.from(message);
+    public static CommandRequest fromStart(final String commandRequest) {
+        final Command command = Command.from(commandRequest);
 
         if (! command.isStart() || command.isEnd()) {
             throw new IllegalArgumentException("[ERROR] 시작 명령어는 start 혹은 end입니다.");
@@ -24,8 +24,8 @@ public class CommandRequest {
         return new CommandRequest(command, List.of());
     }
 
-    public static CommandRequest fromPlay(final String message) {
-        final List<String> splitCommand = splitCommand(message);
+    public static CommandRequest fromPlay(final String commandRequest) {
+        final List<String> splitCommand = splitCommand(commandRequest);
         final Command command = Command.from(splitCommand.get(0));
 
         if (command.isStart()) {
