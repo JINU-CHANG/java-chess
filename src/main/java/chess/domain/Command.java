@@ -15,23 +15,11 @@ public enum Command {
         this.message = message;
     }
 
-    public static Command fromStart(final String message) {
-        validateStartCommand(message);
-
-        return Command.from(message);
-    }
-
     public static Command from(final String message) {
         return Arrays.stream(values())
                 .filter(command -> command.message.equals(message))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("[ERROR] 올바르지 않은 명령어입니다."));
-    }
-
-    private static void validateStartCommand(final String message) {
-        if (!(START.message.equals(message) || END.message.equals(message))) {
-            throw new IllegalArgumentException("[ERROR] 시작 명령어는 start 혹은 end입니다.");
-        }
     }
 
     public boolean isStart() {

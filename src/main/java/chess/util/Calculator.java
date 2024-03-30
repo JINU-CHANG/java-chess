@@ -9,16 +9,19 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ScoreCalculator {
+public class Calculator {
 
-    private static final double PAWN_MINUS_SCORE = (-1) * 0.5;
+    private static final double PAWN_MINUS_SCORE = 0.5;
+
+    private Calculator() {
+    }
 
     public static double calculateScore(final Map<Position, Piece> pieces) {
         double scoreSum = pieces.values().stream()
                 .mapToDouble(Piece::getScore)
                 .sum();
 
-        return scoreSum + calculatePawnScore(pieces);
+        return scoreSum - calculatePawnScore(pieces);
     }
 
     private static double calculatePawnScore(final Map<Position, Piece> pieces) {

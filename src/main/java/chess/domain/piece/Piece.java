@@ -15,10 +15,6 @@ public abstract class Piece {
         this.color = color;
     }
 
-    public Set<Position> getCatchRoute(final Movement movement) {
-        return getRoute(movement);
-    }
-
     public Set<Position> getRoute(final Movement movement) {
         Position position = movement.getLowerPosition();
 
@@ -35,19 +31,20 @@ public abstract class Piece {
         return positions;
     }
 
+    public boolean isOpponent(final Piece otherPiece) {
+        return !color.equals(otherPiece.color);
+    }
+
+    public boolean isColor(final Color otherColor) {
+        return color.equals(otherColor);
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
     private int distance(final Movement movement) {
         return Math.max(movement.getRankDistance(), movement.getFileDistance());
-    }
-    public boolean isOpponent(final Piece other) {
-        return this.color != other.color;
-    }
-
-    public boolean isColor(final Color color) {
-        return this.color.equals(color);
-    }
-
-    public boolean isBlack() {
-        return this.color.equals(Color.BLACK);
     }
 
     public abstract boolean isPawn();
@@ -71,9 +68,5 @@ public abstract class Piece {
     @Override
     public int hashCode() {
         return Objects.hash(color);
-    }
-
-    public Color getColor() {
-        return color;
     }
 }

@@ -1,7 +1,8 @@
-package chess.domain;
+package chess.domain.board;
 
 import chess.domain.piece.Color;
 import chess.domain.piece.Piece;
+import chess.domain.piece.type.Pawn;
 import chess.domain.position.Movement;
 import chess.domain.position.Position;
 import java.util.Collections;
@@ -30,12 +31,6 @@ public class ChessBoard {
         turn.change();
     }
 
-    private void validateTurn(final Turn turn, final Piece currentPiece) {
-        if (!turn.myTurn(currentPiece)) {
-            throw new IllegalArgumentException(String.format("[ERROR] 현재는 %s의 차례입니다.", turn.getTurn()));
-        }
-    }
-
     public Piece findPieceBy(final Position position) {
         if (isPieceExist(position)) {
             return pieces.get(position);
@@ -50,14 +45,17 @@ public class ChessBoard {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
+    private void validateTurn(final Turn turn, final Piece currentPiece) {
+        if (!turn.myTurn(currentPiece)) {
+            throw new IllegalArgumentException(String.format("[ERROR] 현재는 %s의 차례입니다.", turn.getTurn()));
+        }
+    }
+
     private Set<Position> getRoute(final Piece currentPiece, final Position current, final Position destination) {
         final Movement movement = new Movement(current, destination);
 
         if (isPieceExist(destination)) {
-            final Piece targetPiece = findPieceBy(destination);
-
-            validateOpponent(currentPiece, targetPiece);
-            return currentPiece.getCatchRoute(movement);
+            validateOpponent(currentPiece, findPieceBy(destination));
         }
 
         return currentPiece.getRoute(movement);
@@ -65,6 +63,10 @@ public class ChessBoard {
 
     private void validateStrategy(final Piece currentPiece, final Position current, final Position destination) {
         final Movement movement = new Movement(current, destination);
+
+        if (currentPiece.isPawn() && isPieceExist(destination) && ((Pawn) currentPiece).canCatch(movement)) {
+            return;
+        }
 
         if (!currentPiece.canMove(movement)) {
             throw new IllegalArgumentException("[ERROR] 전략상 이동할 수 없는 위치입니다.");
@@ -80,11 +82,9 @@ public class ChessBoard {
     }
 
     private void validateOpponent(final Piece currentPiece, final Piece targetPiece) {
-        if (currentPiece.isOpponent(targetPiece)) {
-            return;
+        if (!currentPiece.isOpponent(targetPiece)) {
+            throw new IllegalArgumentException("[ERROR] 같은 팀의 기물은 잡을 수 없습니다.");
         }
-
-        throw new IllegalArgumentException("[ERROR] 잡을 수 없는 기물입니다.");
     }
 
     private boolean isPieceExist(final Position position) {

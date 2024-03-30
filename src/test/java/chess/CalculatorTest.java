@@ -1,17 +1,17 @@
 package chess;
 
-import chess.domain.ChessBoard;
+import chess.domain.board.ChessBoard;
 import chess.domain.ChessBoardFixture;
 import chess.domain.piece.Color;
 import chess.domain.piece.Piece;
 import chess.domain.position.Position;
-import chess.util.ScoreCalculator;
+import chess.util.Calculator;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class ScoreCalculatorTest {
+class CalculatorTest {
 
     @DisplayName("기물들의 점수를 계산한다. 블랙폰은 1로 계산된다.")
     @Test
@@ -21,7 +21,7 @@ class ScoreCalculatorTest {
 
         // when
         final Map<Position, Piece> pieces = chessBoard.getPiecesWithPositionBy(Color.BLACK);
-        final double score = ScoreCalculator.calculateScore(pieces);
+        final double score = Calculator.calculateScore(pieces);
 
         // then
         Assertions.assertThat(score).isEqualTo(20);
@@ -35,7 +35,7 @@ class ScoreCalculatorTest {
 
         // when
         final Map<Position, Piece> pieces = chessBoard.getPiecesWithPositionBy(Color.BLACK);
-        final double score = ScoreCalculator.calculateScore(pieces);
+        final double score = Calculator.calculateScore(pieces);
 
         // then
         Assertions.assertThat(score).isEqualTo(20.5);
@@ -49,7 +49,7 @@ class ScoreCalculatorTest {
 
         // when
         final Map<Position, Piece> pieces = chessBoard.getPiecesWithPositionBy(Color.WHITE);
-        final double score = ScoreCalculator.calculateScore(pieces);
+        final double score = Calculator.calculateScore(pieces);
 
         // then
         Assertions.assertThat(score).isEqualTo(19.5);
@@ -63,7 +63,7 @@ class ScoreCalculatorTest {
 
         // when
         final Map<Position, Piece> pieces = chessBoard.getPiecesWithPositionBy(Color.WHITE);
-        final double score = ScoreCalculator.calculateScore(pieces);
+        final double score = Calculator.calculateScore(pieces);
 
         // then
         Assertions.assertThat(score).isEqualTo(19.5);

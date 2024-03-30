@@ -2,10 +2,10 @@ package chess.controller;
 
 import static chess.exception.RetryHandler.retryOnException;
 
-import chess.domain.Command;
+import chess.domain.Scores;
 import chess.dto.ChessBoardResponse;
 import chess.dto.CommandRequest;
-import chess.domain.ChessBoard;
+import chess.domain.board.ChessBoard;
 import chess.util.ChessBoardInitializer;
 import chess.domain.position.Position;
 import chess.view.InputView;
@@ -23,12 +23,12 @@ public class ChessController {
     }
 
     public void run() {
-        printCommandMenu();
+        outputView.printCommandMenu();
         retryOnException(this::startGame);
     }
 
     private void startGame() {
-        final Command command = Command.fromStart(inputView.readCommand());
+        final CommandRequest command = CommandRequest.fromStart(inputView.readCommand());
 
         if (command.isStart()) {
             final ChessBoard chessBoard = ChessBoardInitializer.init();
@@ -45,26 +45,28 @@ public class ChessController {
 
     private void playTurn(final ChessBoard chessBoard) {
         while (true) {
-            final CommandRequest commandRequest = CommandRequest.fromPlay(inputView.readCommand());
+            final CommandRequest command = CommandRequest.fromPlay(inputView.readCommand());
 
-            if (commandRequest.isEnd()) {
+            if (command.isEnd()) {
                 break;
             }
 
-            if (commandRequest.isMove()) {
-                move(chessBoard, commandRequest.getBody());
+            if (command.isMove()) {
+                move(chessBoard, command);
                 printChessBoard(chessBoard);
+            }
+
+            if (command.isStatus()) {
+                outputView.printScores(Scores.from(chessBoard));
             }
         }
     }
 
-    private void printCommandMenu() {
-        outputView.printCommandMenu();
-    }
+    private void move(final ChessBoard chessBoard, final CommandRequest commandRequest) {
+        final List<String> body = commandRequest.getBody();
 
-    private void move(final ChessBoard chessBoard, final List<String> command) {
-        final Position current = new Position(command.get(0));
-        final Position destination = new Position(command.get(1));
+        final Position current = new Position(body.get(0));
+        final Position destination = new Position(body.get(1));
 
         chessBoard.move(current, destination);
     }
