@@ -4,28 +4,28 @@ import chess.domain.Command;
 import java.util.Arrays;
 import java.util.List;
 
-public class CommandRequest {
+public class CommandDto {
 
     private final Command command;
     private final List<String> body;
 
-    private CommandRequest(final Command command, final List<String> body) {
+    private CommandDto(final Command command, final List<String> body) {
         this.command = command;
         this.body = body;
     }
 
-    public static CommandRequest fromStart(final String commandRequest) {
-        final Command command = Command.from(commandRequest);
+    public static CommandDto fromStart(final String commandDto) {
+        final Command command = Command.from(commandDto);
 
-        if (! command.isStart() || command.isEnd()) {
-            throw new IllegalArgumentException("[ERROR] 시작 명령어는 start 혹은 end입니다.");
+        if (! (command.isStart() || command.isEnd() || command.isReload())) {
+            throw new IllegalArgumentException("[ERROR] 시작 명령어는 start,end 혹은 reload입니다.");
         }
 
-        return new CommandRequest(command, List.of());
+        return new CommandDto(command, List.of());
     }
 
-    public static CommandRequest fromPlay(final String commandRequest) {
-        final List<String> splitCommand = splitCommand(commandRequest);
+    public static CommandDto fromPlay(final String commandDto) {
+        final List<String> splitCommand = splitCommand(commandDto);
         final Command command = Command.from(splitCommand.get(0));
 
         if (command.isStart()) {
@@ -33,23 +33,25 @@ public class CommandRequest {
         }
 
         if (command.isMove()) {
-            return new CommandRequest(command, getPositions(splitCommand));
+            return new CommandDto(command, getPositions(splitCommand));
         }
 
-        return new CommandRequest(command, List.of());
+        return new CommandDto(command, List.of());
     }
 
-    private static List<String> getPositions(final List<String> commandRequest) {
-        if (commandRequest.size() != 3) {
+    private static List<String> getPositions(final List<String> commandDto) {
+        if (commandDto.size() != 3) {
             throw new IllegalArgumentException("[ERROR] 움직일 위치를 작성해주세요.");
         }
 
-        return commandRequest.subList(1, 3);
+        return commandDto.subList(1, 3);
     }
 
     private static List<String> splitCommand(final String command) {
         return Arrays.asList(command.split(" "));
     }
+
+    public boolean isReload() { return command.isReload(); }
 
     public boolean isStart() {
         return command.isStart();

@@ -4,7 +4,7 @@ import static chess.exception.RetryHandler.retryOnException;
 
 import chess.domain.Scores;
 import chess.dto.ChessBoardResponse;
-import chess.dto.CommandRequest;
+import chess.dto.CommandDto;
 import chess.domain.board.ChessBoard;
 import chess.service.ChessService;
 import chess.view.InputView;
@@ -28,19 +28,25 @@ public class ChessController {
     }
 
     private void startGame() {
-        final CommandRequest command = CommandRequest.fromStart(inputView.readCommand());
+        final CommandDto command = CommandDto.fromStart(inputView.readCommand());
+
+        if (command.isReload()) {
+            startGame(chessService.findRecentBoard());
+        }
 
         if (command.isStart()) {
-            final ChessBoard chessBoard = chessService.createBoard();
-
-            outputView.printChessBoard(ChessBoardResponse.from(chessBoard.getPieces()));
-            retryOnException(() -> playTurn(chessBoard));
+            startGame(chessService.createBoard());
         }
+    }
+
+    private void startGame(final ChessBoard chessBoard) {
+        outputView.printChessBoard(ChessBoardResponse.from(chessBoard.getPieces()));
+        retryOnException(() -> playTurn(chessBoard));
     }
 
     private void playTurn(final ChessBoard chessBoard) {
         while (true) {
-            final CommandRequest command = CommandRequest.fromPlay(inputView.readCommand());
+            final CommandDto command = CommandDto.fromPlay(inputView.readCommand());
 
             if (command.isMove()) {
                 chessService.move(command, chessBoard);

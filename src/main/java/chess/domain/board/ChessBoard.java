@@ -23,6 +23,10 @@ public class ChessBoard {
     }
 
     public void setId(int id) {
+        if (this.id != 0) {
+            throw new IllegalArgumentException("[ERROR] 보드에 새로운 id값을 할당할 수 없습니다.");
+        }
+
         this.id = id;
     }
 

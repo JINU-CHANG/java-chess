@@ -1,46 +1,73 @@
 package chess.dao;
 
 import chess.DBConnection;
-import chess.domain.board.ChessBoard;
+import chess.dto.ChessBoardDto;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class BoardDao {
 
-    public int insertBoard(final ChessBoard chessBoard) {
+    public int insertBoard(final ChessBoardDto chessBoardDto) {
         final String query = "INSERT INTO boards VALUES(?, ?)";
 
         try (final var connection = DBConnection.getConnection();
              final var preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setNull(1, 0);
-            preparedStatement.setString(2, chessBoard.getTurn().name());
+            preparedStatement.setNull(1, chessBoardDto.id());
+            preparedStatement.setString(2, chessBoardDto.turn());
 
             preparedStatement.executeUpdate();
 
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1);
-                } else {
-                    throw new SQLException("Failed to get generated keys, no ID obtained.");
-                }
+                return fetchGeneratedKey(generatedKeys);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("[ERROR] 체스 보드 생성 중 오류가 발생하였습니다 : " + e.getMessage());
         }
     }
 
-    public void updateTurn(final ChessBoard chessBoard) {
-        final String query = "UPDATE boards SET current_turn = (?) WHERE board_id = (?)";
+    public void updateTurn(final ChessBoardDto chessBoardDto) {
+        final String query = "UPDATE boards SET current_turn = ? WHERE board_id = ?";
 
         try (final var connection = DBConnection.getConnection();
              final var preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setString(1, chessBoard.getTurn().name());
-            preparedStatement.setInt(2, chessBoard.getId());
+            preparedStatement.setString(1, chessBoardDto.turn());
+            preparedStatement.setInt(2, chessBoardDto.id());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("[ERROR] 체스 보드 업데이트 중 오류가 발생하였습니다 : " + e.getMessage());
         }
+    }
+
+    public ChessBoardDto findRecentBoard() {
+        final String query = "SELECT * FROM boards ORDER BY board_id DESC LIMIT 1";
+
+        try (final var connection = DBConnection.getConnection();
+             final var preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
+            try (final ResultSet resultSet = preparedStatement.executeQuery()) {
+                return mapToChessBoardDto(resultSet);
+            }
+        } catch (SQLException e) {
+            throw new IllegalStateException("[ERROR] 보드를 조회하는 도중 오류가 발생하였습니다 : " + e.getMessage());
+        }
+    }
+
+    private int fetchGeneratedKey(final ResultSet generatedKeys) throws SQLException {
+        if (generatedKeys.next()) {
+            return generatedKeys.getInt(1);
+        }
+        throw new SQLException("[ERROR] Generated key를 찾을 수 없습니다.");
+    }
+
+    private ChessBoardDto mapToChessBoardDto(final ResultSet resultSet) throws SQLException {
+        if (resultSet.next()) {
+            final int id = resultSet.getInt("board_id");
+            final String turn = resultSet.getString("current_turn");
+
+            return new ChessBoardDto(id, turn);
+        }
+        throw new RuntimeException();
     }
 }

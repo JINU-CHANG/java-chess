@@ -4,8 +4,11 @@ import chess.dao.BoardDao;
 import chess.dao.SquareDao;
 import chess.domain.board.ChessBoard;
 import chess.domain.position.Position;
-import chess.dto.CommandRequest;
-import chess.dto.SquareDto;
+import chess.dto.ChessBoardDto;
+import chess.dto.CommandDto;
+import chess.dto.PieceDto;
+import chess.dto.PositionDto;
+import chess.dto.SquaresDto;
 import chess.util.ChessBoardInitializer;
 import java.util.List;
 
@@ -21,26 +24,37 @@ public class ChessService {
 
     public ChessBoard createBoard() {
         final ChessBoard chessBoard = ChessBoardInitializer.init();
-        final int boardId = boardDao.insertBoard(chessBoard);
-        chessBoard.setId(boardId); //TODO set 개선 필요
+        final ChessBoardDto chessBoardDto = ChessBoardDto.fromChessBoard(chessBoard);
+        final int boardId = boardDao.insertBoard(chessBoardDto);
+        chessBoard.setId(boardId);
 
-        chessBoard.getPieces().forEach((key, value) -> squareDao.insertSquare(chessBoard, key, value));
-
+        createSquares(chessBoard);
         return chessBoard;
     }
 
-    public void move(final CommandRequest commandRequest, final ChessBoard chessBoard) {
-        final List<String> body = commandRequest.getBody();
+    public void move(final CommandDto commandDto, final ChessBoard chessBoard) {
+        final List<String> body = commandDto.getBody();
 
         final Position current = new Position(body.get(0));
         final Position destination = new Position(body.get(1));
 
-        final SquareDto squareDto = squareDao.findBy(chessBoard, current);
-
         chessBoard.move(current, destination);
 
-        squareDao.deleteSquare(chessBoard, current);
-        squareDao.insertSquare(chessBoard, destination, squareDto.color(), squareDto.piece_type());
-        boardDao.updateTurn(chessBoard);
+        final ChessBoardDto chessBoardDto = ChessBoardDto.fromChessBoard(chessBoard);
+        squareDao.deleteAllSquares(chessBoardDto);
+        createSquares(chessBoard);
+        boardDao.updateTurn(chessBoardDto);
+    }
+
+    public ChessBoard findRecentBoard() {
+        final ChessBoardDto boardDto = boardDao.findRecentBoard();
+        final SquaresDto squaresDto = squareDao.findById(boardDto.id());
+
+        return boardDto.toChessBoard(squaresDto);
+    }
+
+    private void createSquares(final ChessBoard chessBoard) {
+        chessBoard.getPieces().forEach((key, value)
+                -> squareDao.insertSquare(chessBoard.getId(), PositionDto.fromPosition(key), PieceDto.fromPiece(value)));
     }
 }

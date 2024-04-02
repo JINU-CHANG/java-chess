@@ -31,7 +31,7 @@ public class ChessBoardInitializer {
         createPawn(pieces, new WhitePawn(), Rank.TWO);
         createPieceWithoutPawn(pieces, Color.WHITE, Rank.ONE);
 
-        return new ChessBoard(new Turn(Color.WHITE), pieces);
+        return new ChessBoard(0, new Turn(Color.WHITE), pieces);
     }
 
     private static void createPawn(final Map<Position, Piece> pieces, final Pawn pawn, final Rank rank) {

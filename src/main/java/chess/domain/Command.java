@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 public enum Command {
 
+    RELOAD("reload"),
     START("start"),
     END("end"),
     STATUS("status"),
@@ -22,6 +23,7 @@ public enum Command {
                 .orElseThrow(() -> new IllegalArgumentException("[ERROR] 올바르지 않은 명령어입니다."));
     }
 
+    public boolean isReload() { return this.equals(Command.RELOAD); }
     public boolean isStart() {
         return this.equals(Command.START);
     }

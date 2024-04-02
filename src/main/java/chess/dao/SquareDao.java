@@ -1,91 +1,76 @@
 package chess.dao;
 
 import chess.DBConnection;
-import chess.domain.board.ChessBoard;
-import chess.domain.piece.Color;
-import chess.domain.piece.Piece;
-import chess.domain.piece.PieceType;
-import chess.domain.position.Position;
+import chess.dto.ChessBoardDto;
+import chess.dto.PieceDto;
+import chess.dto.PositionDto;
 import chess.dto.SquareDto;
+import chess.dto.SquaresDto;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SquareDao {
 
-    public void insertSquare(final ChessBoard chessBoard, final Position position, final Piece piece) {
+    public void insertSquare(final int boardId, final PositionDto positionDto, final PieceDto pieceDto) {
         final String query = "INSERT INTO squares VALUES(?, ?, ?, ?, ?)";
 
         try (final var connection = DBConnection.getConnection();
              final var preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setInt(1, chessBoard.getId());
-            preparedStatement.setInt(2, position.getFileIndex());
-            preparedStatement.setInt(3, position.getRankIndex());
-            preparedStatement.setString(4, piece.getColor().name());
-            preparedStatement.setString(5, piece.getPieceType().name());
+            preparedStatement.setInt(1, boardId);
+            preparedStatement.setInt(2, positionDto.fileIndex());
+            preparedStatement.setInt(3, positionDto.rankIndex());
+            preparedStatement.setString(4, pieceDto.color());
+            preparedStatement.setString(5, pieceDto.pieceType());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("[ERROR] 기물과 위치를 저장하는 도중 오류가 발생하였습니다 : " + e.getMessage());
         }
     }
 
-    public void insertSquare(final ChessBoard chessBoard, final Position position,  final Color color, final PieceType pieceType) {
-        final String query = "INSERT INTO squares VALUES(?, ?, ?, ?, ?)";
-
-        try (final var connection = DBConnection.getConnection();
-             final var preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setInt(1, chessBoard.getId());
-            preparedStatement.setInt(2, position.getFileIndex());
-            preparedStatement.setInt(3, position.getRankIndex());
-            preparedStatement.setString(4, color.name());
-            preparedStatement.setString(5, pieceType.name());
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void deleteSquare(final ChessBoard chessBoard, final Position position) {
-        final String query = "DELETE FROM Squares WHERE board_id = (?) AND square_file = (?) AND square_rank = (?)";
+    public void deleteAllSquares(final ChessBoardDto chessBoardDto) {
+        final String query = "DELETE FROM Squares WHERE board_id = (?)";
 
         try (final var connection = DBConnection.getConnection();
             final var preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, chessBoard.getId());
-            preparedStatement.setInt(2, position.getFileIndex());
-            preparedStatement.setInt(3, position.getRankIndex());
+            preparedStatement.setInt(1, chessBoardDto.id());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("[ERROR] 기물과 위치 정보를 삭제하는 도중 오류가 발생하였습니다 : " + e.getMessage());
         }
     }
 
-    public SquareDto findBy(final ChessBoard chessBoard, final Position position) {
-        final String query = "SELECT * FROM Squares WHERE board_id = (?) AND square_file = (?) AND square_rank = (?)";
+    public SquaresDto findById(final int boardId) {
+        final String query = "SELECT * FROM Squares WHERE board_id = (?)";
 
         try (final var connection = DBConnection.getConnection();
              final var preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, chessBoard.getId());
-            preparedStatement.setInt(2, position.getFileIndex());
-            preparedStatement.setInt(3, position.getRankIndex());
+            preparedStatement.setInt(1, boardId);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    int boardId = resultSet.getInt("board_id");
-                    int file = resultSet.getInt("square_file");
-                    int rank = resultSet.getInt("square_rank");
-                    String color = resultSet.getString("color");
-                    String piece = resultSet.getString("piece_type");
-
-                    return SquareDto.from(boardId, file, rank, color, piece);
-                } else {
-                    throw new RuntimeException("[ERROR] 기물의 위치를 조회하는 과정에서 에러가 발생했습니다.");
-                }
+                return mapToSquaresDto(resultSet);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("[ERROR] 기물과 위치 정보를 조회하는 도중 오류가 발생하였습니다 : " + e.getMessage());
         }
+    }
+
+    private SquaresDto mapToSquaresDto(final ResultSet resultSet) throws SQLException {
+        List<SquareDto> squares = new ArrayList<>();
+
+        while (resultSet.next()) {
+            int file = resultSet.getInt("square_file");
+            int rank = resultSet.getInt("square_rank");
+            String color = resultSet.getString("color");
+            String piece = resultSet.getString("piece_type");
+
+            squares.add(new SquareDto(file, rank, color, piece));
+        }
+
+        return new SquaresDto(squares);
     }
 }

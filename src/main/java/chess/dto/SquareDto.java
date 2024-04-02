@@ -1,11 +1,18 @@
 package chess.dto;
 
-import chess.domain.piece.Color;
-import chess.domain.piece.PieceType;
+import chess.domain.piece.Piece;
+import chess.domain.position.File;
+import chess.domain.position.Position;
+import chess.domain.position.Rank;
+import chess.util.PieceConvertor;
 
-public record SquareDto(int boardId, int file, int rank, Color color, PieceType piece_type) {
+public record SquareDto(int file, int rank, String color, String piece_type) {
 
-    public static SquareDto from(int boardId, int file, int rank, String color, String piece_type) {
-        return new SquareDto(boardId, file, rank, Color.from(color), PieceType.from(piece_type));
+    public Position toPosition() {
+        return new Position(File.fromIndex(file), Rank.fromIndex(rank));
+    }
+
+    public Piece toPiece() {
+        return PieceConvertor.from(piece_type + "_" + color);
     }
 }
