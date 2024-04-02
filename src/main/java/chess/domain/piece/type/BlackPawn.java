@@ -1,6 +1,7 @@
 package chess.domain.piece.type;
 
 import chess.domain.piece.Color;
+import chess.domain.piece.PieceType;
 import chess.domain.position.Movement;
 import chess.domain.position.Rank;
 

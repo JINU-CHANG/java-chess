@@ -1,5 +1,6 @@
 package chess.domain.piece.type;
 
+import chess.domain.piece.PieceType;
 import chess.domain.position.Movement;
 import chess.domain.piece.Color;
 import chess.domain.piece.Piece;
@@ -13,7 +14,7 @@ public class Knight extends Piece {
     private static final double KNIGHT_SCORE = 2.5;
 
     public Knight(final Color color) {
-        super(color);
+        super(color, PieceType.KNIGHT);
     }
 
     @Override

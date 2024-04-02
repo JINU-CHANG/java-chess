@@ -12,12 +12,18 @@ import java.util.stream.Collectors;
 
 public class ChessBoard {
 
-    private final Map<Position, Piece> pieces;
+    private int id;
     private final Turn turn;
+    private final Map<Position, Piece> pieces;
 
-    public ChessBoard(final Turn turn, final Map<Position, Piece> pieces) {
+    public ChessBoard(final int id, final Turn turn, final Map<Position, Piece> pieces) {
+        this.id = id;
         this.turn = turn;
         this.pieces = pieces;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void move(final Position current, final Position destination) {
@@ -50,6 +56,10 @@ public class ChessBoard {
 
     public boolean isKingCaught() {
         return pieces.values().stream().filter(Piece::isKing).count() < 2;
+    }
+
+    public int getId() {
+        return id;
     }
 
     private void validateTurn(final Turn turn, final Piece currentPiece) {

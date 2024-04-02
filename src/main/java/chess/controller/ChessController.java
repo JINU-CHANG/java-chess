@@ -6,20 +6,20 @@ import chess.domain.Scores;
 import chess.dto.ChessBoardResponse;
 import chess.dto.CommandRequest;
 import chess.domain.board.ChessBoard;
-import chess.util.ChessBoardInitializer;
-import chess.domain.position.Position;
+import chess.service.ChessService;
 import chess.view.InputView;
 import chess.view.OutputView;
-import java.util.List;
 
 public class ChessController {
 
     private final InputView inputView;
     private final OutputView outputView;
+    private final ChessService chessService;
 
-    public ChessController(final InputView inputView, final OutputView outputView) {
+    public ChessController(final InputView inputView, final OutputView outputView, final ChessService chessService) {
         this.inputView = inputView;
         this.outputView = outputView;
+        this.chessService = chessService;
     }
 
     public void run() {
@@ -31,29 +31,20 @@ public class ChessController {
         final CommandRequest command = CommandRequest.fromStart(inputView.readCommand());
 
         if (command.isStart()) {
-            final ChessBoard chessBoard = ChessBoardInitializer.init();
+            final ChessBoard chessBoard = chessService.createBoard();
 
-            printChessBoard(chessBoard);
+            outputView.printChessBoard(ChessBoardResponse.from(chessBoard.getPieces()));
             retryOnException(() -> playTurn(chessBoard));
         }
-    }
-
-    private void printChessBoard(final ChessBoard chessBoard) {
-        final ChessBoardResponse chessBoardResponse = ChessBoardResponse.from(chessBoard.getPieces());
-        outputView.printChessBoard(chessBoardResponse);
     }
 
     private void playTurn(final ChessBoard chessBoard) {
         while (true) {
             final CommandRequest command = CommandRequest.fromPlay(inputView.readCommand());
 
-            if (command.isEnd()) {
-                break;
-            }
-
             if (command.isMove()) {
-                move(chessBoard, command);
-                printChessBoard(chessBoard);
+                chessService.move(command, chessBoard);
+                outputView.printChessBoard(ChessBoardResponse.from(chessBoard.getPieces()));
             }
 
             if (command.isStatus()) {
@@ -62,17 +53,11 @@ public class ChessController {
 
             if (chessBoard.isKingCaught()) {
                 outputView.printWinner(chessBoard.getTurn());
+            }
+
+            if (command.isEnd() || chessBoard.isKingCaught()) {
                 break;
             }
         }
-    }
-
-    private void move(final ChessBoard chessBoard, final CommandRequest commandRequest) {
-        final List<String> body = commandRequest.getBody();
-
-        final Position current = new Position(body.get(0));
-        final Position destination = new Position(body.get(1));
-
-        chessBoard.move(current, destination);
     }
 }

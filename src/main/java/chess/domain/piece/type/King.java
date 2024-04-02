@@ -1,5 +1,6 @@
 package chess.domain.piece.type;
 
+import chess.domain.piece.PieceType;
 import chess.domain.position.Movement;
 import chess.domain.piece.Color;
 import chess.domain.piece.Piece;
@@ -12,7 +13,7 @@ public class King extends Piece {
     private static final double KING_SCORE = 0;
 
     public King(final Color color) {
-        super(color);
+        super(color, PieceType.KING);
     }
 
     @Override

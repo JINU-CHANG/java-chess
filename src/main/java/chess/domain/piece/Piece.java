@@ -9,10 +9,12 @@ import java.util.Set;
 
 public abstract class Piece {
 
+    protected final PieceType pieceType;
     protected final Color color;
 
-    protected Piece(final Color color) {
+    protected Piece(final Color color, final PieceType pieceType) {
         this.color = color;
+        this.pieceType = pieceType;
     }
 
     public Set<Position> getRoute(final Movement movement) {
@@ -42,6 +44,8 @@ public abstract class Piece {
     public Color getColor() {
         return color;
     }
+
+    public PieceType getPieceType() { return pieceType; }
 
     private int distance(final Movement movement) {
         return Math.max(movement.getRankDistance(), movement.getFileDistance());
