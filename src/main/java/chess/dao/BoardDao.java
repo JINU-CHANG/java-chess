@@ -18,10 +18,10 @@ public class BoardDao {
 
             preparedStatement.executeUpdate();
 
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                return fetchGeneratedKey(generatedKeys);
-            }
-        } catch (SQLException e) {
+            final ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+
+            return fetchGeneratedKey(generatedKeys);
+        } catch (final SQLException e) {
             throw new IllegalStateException("[ERROR] 체스 보드 생성 중 오류가 발생하였습니다 : " + e.getMessage());
         }
     }
@@ -35,7 +35,7 @@ public class BoardDao {
             preparedStatement.setInt(2, boardDto.id());
 
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new IllegalStateException("[ERROR] 체스 보드 업데이트 중 오류가 발생하였습니다 : " + e.getMessage());
         }
     }
@@ -46,10 +46,10 @@ public class BoardDao {
         try (final var connection = DBConnection.getConnection();
              final var preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-            try (final ResultSet resultSet = preparedStatement.executeQuery()) {
-                return mapToChessBoardDto(resultSet);
-            }
-        } catch (SQLException e) {
+            final ResultSet resultSet = preparedStatement.executeQuery();
+
+            return mapToChessBoardDto(resultSet);
+        } catch (final SQLException e) {
             throw new IllegalStateException("[ERROR] 보드를 조회하는 도중 오류가 발생하였습니다 : " + e.getMessage());
         }
     }

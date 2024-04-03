@@ -15,7 +15,6 @@ import java.util.Map;
 public class PieceClassConvertor {
 
     private PieceClassConvertor() {
-
     }
 
     private static final Map<String, Piece> pieces = new HashMap<>();

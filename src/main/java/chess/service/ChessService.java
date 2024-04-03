@@ -26,10 +26,10 @@ public class ChessService {
         final ChessBoard chessBoard = ChessBoardInitializer.init();
         final BoardDto boardDto = BoardDto.fromChessBoard(chessBoard);
 
-        final int boardId = boardDao.insertBoard(boardDto);
+        final int boardId = boardDao.insertBoard(boardDto); //save
         chessBoard.setId(boardId);
 
-        createSquares(chessBoard);
+        createAllSquares(chessBoard); //리턴타입
         return chessBoard;
     }
 
@@ -43,7 +43,7 @@ public class ChessService {
 
         final BoardDto boardDto = BoardDto.fromChessBoard(chessBoard);
         squareDao.deleteAllSquares(boardDto);
-        createSquares(chessBoard);
+        createAllSquares(chessBoard);
         boardDao.updateTurn(boardDto);
     }
 
@@ -54,7 +54,7 @@ public class ChessService {
         return boardDto.toChessBoard(squaresDto);
     }
 
-    private void createSquares(final ChessBoard chessBoard) {
+    private void createAllSquares(final ChessBoard chessBoard) {
         chessBoard.getPieces().forEach((key, value)
                 -> squareDao.insertSquare(chessBoard.getId(), PositionDto.fromPosition(key), PieceDto.fromPiece(value)));
     }

@@ -17,7 +17,7 @@ public class CommandDto {
     public static CommandDto fromStart(final String commandDto) {
         final Command command = Command.from(commandDto);
 
-        if (! (command.isStart() || command.isEnd() || command.isReload())) {
+        if (!(command.isStart() || command.isEnd() || command.isReload())) {
             throw new IllegalArgumentException("[ERROR] 시작 명령어는 start,end 혹은 reload입니다.");
         }
 

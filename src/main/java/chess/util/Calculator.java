@@ -34,7 +34,7 @@ public class Calculator {
         return sameFilePawnCount * PAWN_MINUS_SCORE;
     }
 
-    private static Set<Position> getPawnPositions(Map<Position, Piece> pieces) {
+    private static Set<Position> getPawnPositions(final Map<Position, Piece> pieces) {
         return pieces.entrySet().stream()
                 .filter(piece -> piece.getValue().isPawn())
                 .map(Entry::getKey)
@@ -42,7 +42,7 @@ public class Calculator {
     }
 
     private static long getSameFilePieceCount(final Set<Position> positions, final File file) {
-        long count = positions.stream().filter(position -> position.isFile(file)).count();
+        final long count = positions.stream().filter(position -> position.isFile(file)).count();
 
         if (count >= 2) {
             return count;

@@ -50,20 +50,25 @@ public class ChessController {
 
             if (commandDto.isMove()) {
                 chessService.move(commandDto, chessBoard);
-                outputView.printChessBoard(ChessBoardDto.from(chessBoard.getPieces()));
             }
 
-            if (commandDto.isStatus()) {
-                outputView.printScores(Scores.from(chessBoard));
-            }
-
-            if (chessBoard.isKingCaught()) {
-                outputView.printWinner(chessBoard.getTurn());
-            }
+            printResult(commandDto, chessBoard);
 
             if (commandDto.isEnd() || chessBoard.isKingCaught()) {
                 break;
             }
+        }
+    }
+
+    private void printResult(final CommandDto commandDto, final ChessBoard chessBoard) {
+        if (commandDto.isMove()) {
+            outputView.printChessBoard(ChessBoardDto.from(chessBoard.getPieces()));
+        }
+        if (commandDto.isStatus()) {
+            outputView.printScores(Scores.from(chessBoard));
+        }
+        if (chessBoard.isKingCaught()) {
+            outputView.printWinner(chessBoard.getTurn());
         }
     }
 }

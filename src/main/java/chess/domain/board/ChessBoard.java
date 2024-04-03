@@ -62,10 +62,6 @@ public class ChessBoard {
         return pieces.values().stream().filter(Piece::isKing).count() < 2;
     }
 
-    public int getId() {
-        return id;
-    }
-
     private void validateTurn(final Turn turn, final Piece currentPiece) {
         if (!turn.myTurn(currentPiece)) {
             throw new IllegalArgumentException(String.format("[ERROR] 현재는 %s의 차례입니다.", turn.getTurn()));
@@ -95,7 +91,7 @@ public class ChessBoard {
     }
 
     private void validatePieceInRoute(final Set<Position> route) {
-        boolean existPiece = pieces.keySet().stream().anyMatch(route::contains);
+        final boolean existPiece = pieces.keySet().stream().anyMatch(route::contains);
 
         if (existPiece) {
             throw new IllegalArgumentException("[ERROR] 경로상 기물이 존재합니다.");
@@ -119,6 +115,10 @@ public class ChessBoard {
 
     public Map<Position, Piece> getPieces() {
         return Collections.unmodifiableMap(pieces);
+    }
+
+    public int getId() {
+        return id;
     }
 
     public Color getTurn() {
