@@ -1,7 +1,8 @@
 package chess.dao;
 
 import chess.DBConnection;
-import chess.dto.ChessBoardDto;
+import chess.domain.board.ChessBoard;
+import chess.dto.BoardDto;
 import chess.dto.PieceDto;
 import chess.dto.PositionDto;
 import chess.dto.SquareDto;
@@ -31,12 +32,12 @@ public class SquareDao {
         }
     }
 
-    public void deleteAllSquares(final ChessBoardDto chessBoardDto) {
+    public void deleteAllSquares(final BoardDto boardDto) {
         final String query = "DELETE FROM Squares WHERE board_id = (?)";
 
         try (final var connection = DBConnection.getConnection();
             final var preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, chessBoardDto.id());
+            preparedStatement.setInt(1, boardDto.id());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

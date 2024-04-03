@@ -1,20 +1,20 @@
 package chess.dao;
 
 import chess.DBConnection;
-import chess.dto.ChessBoardDto;
+import chess.dto.BoardDto;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class BoardDao {
 
-    public int insertBoard(final ChessBoardDto chessBoardDto) {
+    public int insertBoard(final BoardDto boardDto) {
         final String query = "INSERT INTO boards VALUES(?, ?)";
 
         try (final var connection = DBConnection.getConnection();
              final var preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setNull(1, chessBoardDto.id());
-            preparedStatement.setString(2, chessBoardDto.turn());
+            preparedStatement.setNull(1, boardDto.id());
+            preparedStatement.setString(2, boardDto.turn());
 
             preparedStatement.executeUpdate();
 
@@ -26,13 +26,13 @@ public class BoardDao {
         }
     }
 
-    public void updateTurn(final ChessBoardDto chessBoardDto) {
+    public void updateTurn(final BoardDto boardDto) {
         final String query = "UPDATE boards SET current_turn = ? WHERE board_id = ?";
 
         try (final var connection = DBConnection.getConnection();
              final var preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setString(1, chessBoardDto.turn());
-            preparedStatement.setInt(2, chessBoardDto.id());
+            preparedStatement.setString(1, boardDto.turn());
+            preparedStatement.setInt(2, boardDto.id());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -40,7 +40,7 @@ public class BoardDao {
         }
     }
 
-    public ChessBoardDto findRecentBoard() {
+    public BoardDto findRecentBoard() {
         final String query = "SELECT * FROM boards ORDER BY board_id DESC LIMIT 1";
 
         try (final var connection = DBConnection.getConnection();
@@ -61,12 +61,12 @@ public class BoardDao {
         throw new SQLException("[ERROR] Generated key를 찾을 수 없습니다.");
     }
 
-    private ChessBoardDto mapToChessBoardDto(final ResultSet resultSet) throws SQLException {
+    private BoardDto mapToChessBoardDto(final ResultSet resultSet) throws SQLException {
         if (resultSet.next()) {
             final int id = resultSet.getInt("board_id");
             final String turn = resultSet.getString("current_turn");
 
-            return new ChessBoardDto(id, turn);
+            return new BoardDto(id, turn);
         }
         throw new RuntimeException();
     }

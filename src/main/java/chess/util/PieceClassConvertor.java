@@ -2,7 +2,6 @@ package chess.util;
 
 import chess.domain.piece.Color;
 import chess.domain.piece.Piece;
-import chess.domain.piece.PieceType;
 import chess.domain.piece.type.Bishop;
 import chess.domain.piece.type.BlackPawn;
 import chess.domain.piece.type.King;
@@ -13,9 +12,9 @@ import chess.domain.piece.type.WhitePawn;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PieceConvertor {
+public class PieceClassConvertor {
 
-    private PieceConvertor() {
+    private PieceClassConvertor() {
 
     }
 

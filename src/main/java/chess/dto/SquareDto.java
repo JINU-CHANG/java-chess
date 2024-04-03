@@ -4,7 +4,7 @@ import chess.domain.piece.Piece;
 import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
-import chess.util.PieceConvertor;
+import chess.util.PieceClassConvertor;
 
 public record SquareDto(int file, int rank, String color, String piece_type) {
 
@@ -13,6 +13,6 @@ public record SquareDto(int file, int rank, String color, String piece_type) {
     }
 
     public Piece toPiece() {
-        return PieceConvertor.from(piece_type + "_" + color);
+        return PieceClassConvertor.from(piece_type + "_" + color);
     }
 }

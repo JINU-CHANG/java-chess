@@ -2,7 +2,7 @@ package chess.view;
 
 import chess.domain.Scores;
 import chess.domain.piece.Color;
-import chess.dto.ChessBoardResponse;
+import chess.dto.ChessBoardDto;
 import java.util.List;
 
 public class OutputView {
@@ -16,7 +16,7 @@ public class OutputView {
                 > 게임 이동 : move source위치 target위치 - 예. move b2 b3""");
     }
 
-    public void printChessBoard(final ChessBoardResponse chessBoardDto) {
+    public void printChessBoard(final ChessBoardDto chessBoardDto) {
         chessBoardDto.chessBoard().forEach(this::printChessRow);
     }
 

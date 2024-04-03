@@ -4,7 +4,7 @@ import chess.dao.BoardDao;
 import chess.dao.SquareDao;
 import chess.domain.board.ChessBoard;
 import chess.domain.position.Position;
-import chess.dto.ChessBoardDto;
+import chess.dto.BoardDto;
 import chess.dto.CommandDto;
 import chess.dto.PieceDto;
 import chess.dto.PositionDto;
@@ -24,8 +24,9 @@ public class ChessService {
 
     public ChessBoard createBoard() {
         final ChessBoard chessBoard = ChessBoardInitializer.init();
-        final ChessBoardDto chessBoardDto = ChessBoardDto.fromChessBoard(chessBoard);
-        final int boardId = boardDao.insertBoard(chessBoardDto);
+        final BoardDto boardDto = BoardDto.fromChessBoard(chessBoard);
+
+        final int boardId = boardDao.insertBoard(boardDto);
         chessBoard.setId(boardId);
 
         createSquares(chessBoard);
@@ -40,14 +41,14 @@ public class ChessService {
 
         chessBoard.move(current, destination);
 
-        final ChessBoardDto chessBoardDto = ChessBoardDto.fromChessBoard(chessBoard);
-        squareDao.deleteAllSquares(chessBoardDto);
+        final BoardDto boardDto = BoardDto.fromChessBoard(chessBoard);
+        squareDao.deleteAllSquares(boardDto);
         createSquares(chessBoard);
-        boardDao.updateTurn(chessBoardDto);
+        boardDao.updateTurn(boardDto);
     }
 
     public ChessBoard findRecentBoard() {
-        final ChessBoardDto boardDto = boardDao.findRecentBoard();
+        final BoardDto boardDto = boardDao.findRecentBoard();
         final SquaresDto squaresDto = squareDao.findById(boardDto.id());
 
         return boardDto.toChessBoard(squaresDto);
