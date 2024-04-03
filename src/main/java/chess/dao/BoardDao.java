@@ -2,6 +2,8 @@ package chess.dao;
 
 import chess.DBConnection;
 import chess.dto.BoardDto;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,8 +13,8 @@ public class BoardDao {
     public int insertBoard(final BoardDto boardDto) {
         final String query = "INSERT INTO boards VALUES(?, ?)";
 
-        try (final var connection = DBConnection.getConnection();
-             final var preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+        try (final Connection connection = DBConnection.getConnection();
+             final PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setNull(1, boardDto.id());
             preparedStatement.setString(2, boardDto.turn());
 
@@ -29,8 +31,8 @@ public class BoardDao {
     public void updateTurn(final BoardDto boardDto) {
         final String query = "UPDATE boards SET current_turn = ? WHERE board_id = ?";
 
-        try (final var connection = DBConnection.getConnection();
-             final var preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+        try (final Connection connection = DBConnection.getConnection();
+             final PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, boardDto.turn());
             preparedStatement.setInt(2, boardDto.id());
 
@@ -43,8 +45,8 @@ public class BoardDao {
     public BoardDto findRecentBoard() {
         final String query = "SELECT * FROM boards ORDER BY board_id DESC LIMIT 1";
 
-        try (final var connection = DBConnection.getConnection();
-             final var preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+        try (final Connection connection = DBConnection.getConnection();
+             final PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             final ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -68,6 +70,6 @@ public class BoardDao {
 
             return new BoardDto(id, turn);
         }
-        throw new RuntimeException();
+        throw new IllegalStateException("[ERROR] 결과값이 존재하지 않습니다.");
     }
 }

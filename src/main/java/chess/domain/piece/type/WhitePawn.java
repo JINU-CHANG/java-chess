@@ -14,7 +14,7 @@ public class WhitePawn extends Pawn{
 
     @Override
     public boolean canCatch(final Movement movement) {
-        return  movement.isDiagonal() && movement.isUp()&& movement.getRankDistance() == Pawn.DEFAULT_STEP;
+        return movement.isDiagonal() && movement.isUp()&& movement.getRankDistance() == Pawn.DEFAULT_STEP;
     }
 
     @Override
