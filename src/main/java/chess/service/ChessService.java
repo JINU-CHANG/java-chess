@@ -26,10 +26,10 @@ public class ChessService {
         final ChessBoard chessBoard = ChessBoardInitializer.init();
         final BoardDto boardDto = BoardDto.fromChessBoard(chessBoard);
 
-        final int boardId = boardDao.insertBoard(boardDto); //save
+        final int boardId = boardDao.insertBoard(boardDto);
         chessBoard.setId(boardId);
 
-        createAllSquares(chessBoard); //리턴타입
+        createAllSquares(chessBoard);
         return chessBoard;
     }
 
