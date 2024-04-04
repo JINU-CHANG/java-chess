@@ -1,6 +1,6 @@
 package chess.view;
 
-import chess.domain.Scores;
+import chess.dto.ScoresDto;
 import chess.domain.piece.Color;
 import chess.dto.ChessBoardDto;
 import java.util.List;
@@ -20,9 +20,9 @@ public class OutputView {
         chessBoardDto.chessBoard().forEach(this::printChessRow);
     }
 
-    public void printScores(final Scores scores) {
-        final double blackScore = scores.getBlackScore();
-        final double whiteScore = scores.getWhiteScore();
+    public void printScores(final ScoresDto scoresDto) {
+        final double blackScore = scoresDto.blackScore();
+        final double whiteScore = scoresDto.whiteScore();
 
         System.out.println(String.format("BLACK 점수 : %.2f, WHITE 점수 : %.2f", blackScore, whiteScore));
     }
