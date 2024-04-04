@@ -45,7 +45,9 @@ public abstract class Piece {
         return color;
     }
 
-    public PieceType getPieceType() { return pieceType; }
+    public PieceType getPieceType() {
+        return pieceType;
+    }
 
     private int distance(final Movement movement) {
         return Math.max(movement.getRankDistance(), movement.getFileDistance());

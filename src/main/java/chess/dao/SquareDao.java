@@ -20,7 +20,7 @@ public class SquareDao {
         final String query = "INSERT INTO squares VALUES(?, ?, ?, ?, ?)";
 
         try (final Connection connection = DBConnection.getConnection();
-             final PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+             final PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, boardId);
             preparedStatement.setInt(2, positionDto.fileIndex());
             preparedStatement.setInt(3, positionDto.rankIndex());

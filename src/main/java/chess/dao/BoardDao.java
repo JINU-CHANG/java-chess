@@ -32,7 +32,7 @@ public class BoardDao {
         final String query = "UPDATE boards SET current_turn = ? WHERE board_id = ?";
 
         try (final Connection connection = DBConnection.getConnection();
-             final PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+             final PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, boardDto.turn());
             preparedStatement.setInt(2, boardDto.id());
 
@@ -46,7 +46,7 @@ public class BoardDao {
         final String query = "SELECT * FROM boards ORDER BY board_id DESC LIMIT 1";
 
         try (final Connection connection = DBConnection.getConnection();
-             final PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+             final PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             final ResultSet resultSet = preparedStatement.executeQuery();
 
