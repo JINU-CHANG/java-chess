@@ -2,9 +2,9 @@ package chess.controller;
 
 import static chess.exception.RetryHandler.retryOnException;
 
-import chess.domain.Scores;
+import chess.dto.ScoresDto;
 import chess.dto.ChessBoardDto;
-import chess.dto.CommandDto;
+import chess.domain.command.Command;
 import chess.domain.board.ChessBoard;
 import chess.service.ChessService;
 import chess.view.InputView;
@@ -28,13 +28,13 @@ public class ChessController {
     }
 
     private void startGame() {
-        final CommandDto commandDto = CommandDto.fromStart(inputView.readCommand());
+        final Command command = Command.fromStart(inputView.readCommand());
 
-        if (commandDto.isReload()) {
+        if (command.isReload()) {
             startGame(chessService.findRecentBoard());
         }
 
-        if (commandDto.isStart()) {
+        if (command.isStart()) {
             startGame(chessService.createBoard());
         }
     }
@@ -46,26 +46,26 @@ public class ChessController {
 
     private void playTurn(final ChessBoard chessBoard) {
         while (true) {
-            final CommandDto commandDto = CommandDto.fromPlay(inputView.readCommand());
+            final Command command = Command.fromPlay(inputView.readCommand());
 
-            if (commandDto.isMove()) {
-                chessService.move(commandDto, chessBoard);
+            if (command.isMove()) {
+                chessService.move(command, chessBoard);
             }
 
-            printResult(commandDto, chessBoard);
+            printResult(command, chessBoard);
 
-            if (commandDto.isEnd() || chessBoard.isKingCaught()) {
+            if (command.isEnd() || chessBoard.isKingCaught()) {
                 break;
             }
         }
     }
 
-    private void printResult(final CommandDto commandDto, final ChessBoard chessBoard) {
-        if (commandDto.isMove()) {
+    private void printResult(final Command command, final ChessBoard chessBoard) {
+        if (command.isMove()) {
             outputView.printChessBoard(ChessBoardDto.from(chessBoard.getPieces()));
         }
-        if (commandDto.isStatus()) {
-            outputView.printScores(Scores.from(chessBoard));
+        if (command.isStatus()) {
+            outputView.printScores(ScoresDto.fromChessBoard(chessBoard));
         }
         if (chessBoard.isKingCaught()) {
             outputView.printWinner(chessBoard.getTurn());

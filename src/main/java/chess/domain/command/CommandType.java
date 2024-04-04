@@ -1,8 +1,8 @@
-package chess.domain;
+package chess.domain.command;
 
 import java.util.Arrays;
 
-public enum Command {
+public enum CommandType {
 
     RELOAD("reload"),
     START("start"),
@@ -12,31 +12,34 @@ public enum Command {
 
     private final String message;
 
-    Command(final String message) {
+    CommandType(final String message) {
         this.message = message;
     }
 
-    public static Command from(final String message) {
+    public static CommandType from(final String message) {
         return Arrays.stream(values())
                 .filter(command -> command.message.equals(message))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("[ERROR] 올바르지 않은 명령어입니다."));
     }
 
-    public boolean isReload() { return this.equals(Command.RELOAD); }
+    public boolean isReload() {
+        return this == CommandType.RELOAD;
+    }
+
     public boolean isStart() {
-        return this.equals(Command.START);
+        return this == CommandType.START;
     }
 
     public boolean isMove() {
-        return this.equals(Command.MOVE);
+        return this == CommandType.MOVE;
     }
 
     public boolean isEnd() {
-        return this.equals(Command.END);
+        return this == CommandType.END;
     }
 
     public boolean isStatus() {
-        return this.equals(Command.STATUS);
+        return this == CommandType.STATUS;
     }
 }

@@ -2,6 +2,7 @@ package chess.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import chess.domain.command.CommandType;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,7 +16,7 @@ class CommandTest {
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "  "})
     void BlankInputThrowException(final String value) {
-        Assertions.assertThatThrownBy(() -> Command.from(value))
+        Assertions.assertThatThrownBy(() -> CommandType.from(value))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("[ERROR] 올바르지 않은 명령어입니다.");
     }
@@ -24,7 +25,7 @@ class CommandTest {
     @ParameterizedTest
     @NullSource
     void nullInputThrowException(final String value) {
-        Assertions.assertThatThrownBy(() -> Command.from(value))
+        Assertions.assertThatThrownBy(() -> CommandType.from(value))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("[ERROR] 올바르지 않은 명령어입니다.");
     }
@@ -33,7 +34,7 @@ class CommandTest {
     @ParameterizedTest
     @ValueSource(strings = {"st", "END", "go"})
     void test(final String value) {
-        Assertions.assertThatThrownBy(() -> Command.from(value))
+        Assertions.assertThatThrownBy(() -> CommandType.from(value))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("[ERROR] 올바르지 않은 명령어입니다.");
     }
@@ -41,11 +42,11 @@ class CommandTest {
     @DisplayName("올바른 입력에 대해 명령어를 생성한다.")
     @CsvSource(value = {"start, START", "end, END"})
     @ParameterizedTest
-    void create(final String value, final Command expected) {
+    void create(final String value, final CommandType expected) {
         // given
-        final Command command = Command.from(value);
+        final CommandType commandType = CommandType.from(value);
 
         // when & then
-        assertThat(command).isEqualTo(expected);
+        assertThat(commandType).isEqualTo(expected);
     }
 }

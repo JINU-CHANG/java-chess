@@ -5,7 +5,7 @@ import chess.dao.SquareDao;
 import chess.domain.board.ChessBoard;
 import chess.domain.position.Position;
 import chess.dto.BoardDto;
-import chess.dto.CommandDto;
+import chess.domain.command.Command;
 import chess.dto.PieceDto;
 import chess.dto.PositionDto;
 import chess.dto.SquaresDto;
@@ -33,8 +33,8 @@ public class ChessService {
         return chessBoard;
     }
 
-    public void move(final CommandDto commandDto, final ChessBoard chessBoard) {
-        final List<String> body = commandDto.getBody();
+    public void move(final Command command, final ChessBoard chessBoard) {
+        final List<String> body = command.getBody();
 
         final Position current = new Position(body.get(0));
         final Position destination = new Position(body.get(1));
